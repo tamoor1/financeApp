@@ -58,7 +58,7 @@ export default class Navbar extends Component<{}> {
     return (
       <View
         style={{
-          backgroundColor: 'red',
+          backgroundColor: '#b01800',
           height: deviceHeight / 10,
           paddingTop: deviceHeight / 25,
           flexDirection: "row",

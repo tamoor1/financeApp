@@ -105,7 +105,7 @@ export default class App extends Component<{}> {
 					<View style={styles.container1}>
 						<View style={styles.logoView}>
 							<Image
-								source={require('../images/newLogo.png')}
+								source={require('../images/logo1.png')}
 								resizeMode={'contain'}
 								style={{ width: '100%', height: 130 }}
 							/>
@@ -147,7 +147,7 @@ export default class App extends Component<{}> {
 							</Text>
 						</View>
 					</View>
-					<DropdownMessageAlert ref={(c) => (this._dropdown = c)} />
+					{/* <DropdownMessageAlert ref={(c) => (this._dropdown = c)} /> */}
 				</ScrollView>
 			</View>
 		);
@@ -186,7 +186,7 @@ const styles = {
 	},
 	button: {
 		// flex: 1,
-		backgroundColor: 'red',
+		backgroundColor: '#b01800',
 		alignItems: 'center',
 		justifyContent: 'center',
 		height: 50,

@@ -20,7 +20,7 @@ export default class HomeScreen extends Component<> {
       <View style={styles.container}>
         <View style={styles.logoView}>
           <Image
-            source={require("../images/newLogo.png")}
+            source={require("../images/logo1.png")}
             resizeMode={"contain"}
             style={{ width: "100%", height: 130 }}
           />
@@ -64,13 +64,13 @@ const styles = StyleSheet.create({
   },
   button: {
     // flex: 1,
-    backgroundColor: "red",
+    backgroundColor: "#b01800",
     alignItems: "center",
     justifyContent: "center",
     height: 50,
     width: "100%",
     borderRadius: 5,
-    borderColor: "red",
+    borderColor: "#b01800",
     borderWidth: 1,
     marginVertical: 5
     // paddingVertical: 30

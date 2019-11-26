@@ -75,7 +75,7 @@ export default class App extends Component<{}> {
         <View style={styles.container}>
           <ScrollView contentContainerStyle={{padding: 20}} keyboardDismissMode={'on-drag'} >
           <View style={styles.logoView}>
-            <Image source={require('../images/newLogo.png')}
+            <Image source={require('../images/logo1.png')}
               resizeMode={'contain'}
               style={{width: '100%', height: 130}}
             />
@@ -157,7 +157,7 @@ const styles = {
   },
   button: {
     // flex: 1,
-    backgroundColor: '#012A59',
+    backgroundColor: '#b01800',
     alignItems: 'center',
     justifyContent: 'center',
     height: 50,

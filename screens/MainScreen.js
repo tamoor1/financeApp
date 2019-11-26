@@ -38,7 +38,7 @@ export default class App extends Component<{}> {
   render() {
 
     return (
-      <View style={{ flex: 1, backgroundColor: 'red' }}>
+      <View style={{ flex: 1, backgroundColor: '#b01800' }}>
         <Header
           navigation={this.props.navigation}
           showDrawer={true}
