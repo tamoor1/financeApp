@@ -21,7 +21,7 @@ export default class App extends Component<{}> {
 	navigation = this.props.navigation;
 
 	state = {
-		userName: '',
+		email: '',
 		password: '',
 		loginData: {}
 	};
@@ -48,14 +48,14 @@ export default class App extends Component<{}> {
 	}
 	validateForm() {
 		const { state } = this;
-		let userName = state.userName;
+		let email = state.email;
 		let password = state.password;
 		let isValid = false;
 
-		if (userName == '') {
+		if (email == '') {
 			this._dropdown.itemAction({
 				title: 'Error',
-				message: 'User Name is required',
+				message: 'Email is required',
 				type: 'error'
 			});
 		} else if (password == '') {
@@ -75,19 +75,22 @@ export default class App extends Component<{}> {
 		if (this.validateForm()) {
 			const { state } = this;
 
-			const url = `/auth/login?username=${state.userName}&password=${state.password}`;
+			const url = `/auth/login?email=${state.email}&password=${state.password}`;
 			this._loginBtn.showLoading(true);
 			const response = await services.login(url);
+			console.log('TCL: App -> login -> response', response);
+
 			const responseJson = await response.json();
+			console.log('TCL: App -> login -> responseJson', responseJson);
 			this._loginBtn.showLoading(false);
 
 			// const userId = await functions.getUserId();
-			if (responseJson.authenticate === 1) {
-				await functions.setUserData(responseJson);
-				var date = new Date();
-				const logindata = { isLogin: 1, LastLoginData: date };
-				await functions.setLoginData(logindata);
-				this.navigation.navigate('Home');
+			if (responseJson) {
+				// await functions.setUserData(responseJson);
+				// var date = new Date();
+				// const logindata = { isLogin: 1, LastLoginData: date };
+				// await functions.setLoginData(logindata);
+				this.navigation.navigate('Dashboard');
 			} else {
 				this._dropdown.itemAction({
 					type: 'error',
@@ -111,12 +114,12 @@ export default class App extends Component<{}> {
 							/>
 						</View>
 						<View style={styles.form}>
-							<Text style={styles.inputText}>User Name</Text>
+							<Text style={styles.inputText}>Email</Text>
 							<TextInput
 								style={styles.inputBox}
-								value={this.state.userName}
-								onChangeText={(t) => this.setState({ userName: t })}
-								placeholder="User Name"
+								value={this.state.email}
+								onChangeText={(t) => this.setState({ email: t })}
+								placeholder="Email"
 								autoCorrect={false}
 								autoCapitalize="none"
 								placeholderTextColor="#a6b8d4"
