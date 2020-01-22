@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Dialog, { SlideAnimation, DialogContent, ScaleAnimation } from 'react-native-popup-dialog';
 import {
   View,
   Text,
@@ -11,8 +12,6 @@ import {
 } from "react-native";
 import DropdownMessageAlert from "../templates/DropdownMessageAlert";
 import Icon from "react-native-vector-icons/FontAwesome";
-import functions from "../utils/functions";
-import services from "../utils/services";
 
 const deviceHeight = Dimensions.get("screen").height;
 
@@ -24,31 +23,35 @@ export default class DrawerScreen extends Component<> {
     cmsData: {}
   };
   async logout() {
-    await AsyncStorage.multiRemove(["user_token", "isloggedin", "userData"]);
-    var date = new Date();
-    // const logindata = { isLogin: 0, LastLoginData: date };
-    // await functions.setLoginData(logindata);
-    this.props.navigation.navigate("Auth");
+    this.setState({
+      popupVisible: false
+    });
+    await AsyncStorage.multiRemove(['user_token', 'isloggedin', 'userData']);
+    this.props.navigation.navigate('Auth');
+
   }
+
+  popupVisible() {
+    this.setState({
+      popupVisible: true
+    });
+  }
+
   async componentDidMount() {
     const userData = await functions.getUserData();
     this.setState({ userData });
     console.log(userData);
-    const cmsData = await functions.getCMSData();
-    this.setState({ cmsData });
-    console.log("NAv color: ", cmsData.nav_color);
   }
-  
+
   openNavigation(route) {
     const { navigation } = this.props;
     navigation.closeDrawer();
     navigation.navigate(route);
   }
-  
+
   render() {
     const { navigation } = this.props;
     const { userData } = this.state;
-    const { cmsData } = this.state;
     return (
       <View style={{ flex: 1, backgroundColor: 'purple' }}>
         <ScrollView contentContainerStyle={{ padding: 30 }}>
@@ -70,9 +73,9 @@ export default class DrawerScreen extends Component<> {
             </TouchableOpacity>
             <View style={{ marginLeft: deviceWidth / 20 }}>
               <Text style={[styles.profName, styles.fontColor]}>
-                {userData.name}
+                Finance App
               </Text>
-              <Text style={styles.fontColor}>My Gallery</Text>
+              <Text style={styles.fontColor}>My Records</Text>
             </View>
           </View>
           <View>
@@ -88,22 +91,9 @@ export default class DrawerScreen extends Component<> {
               />
               <Text style={[styles.tabText, styles.fontColor]}>Dashboard</Text>
             </TouchableOpacity>
+
             <TouchableOpacity
-              onPress={() => this.openNavigation("Jobs")}
-              style={styles.tabBar}
-            >
-              <Icon
-                name="align-left"
-                backgroundColor="#3b5998"
-                color="#FFFFFF"
-                size={20}
-              />
-              <Text style={[styles.tabText, styles.fontColor]}>
-                {cmsData.jobs_title}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.openNavigation("DoneJobs")}
+              onPress={() => this.openNavigation("addCustomer")}
               style={styles.tabBar}
             >
               <Icon
@@ -113,134 +103,26 @@ export default class DrawerScreen extends Component<> {
                 size={20}
               />
               <Text style={[styles.tabText, styles.fontColor]}>
-                {cmsData.jobs_outstanding_title}
+                Add Customers
               </Text>
             </TouchableOpacity>
+
             <TouchableOpacity
-              onPress={() => this.openNavigation("RaiseJob")}
+              onPress={() => this.openNavigation("listCustomer")}
               style={styles.tabBar}
             >
               <Icon
-                name="pencil"
+                name="list"
                 backgroundColor="#3b5998"
                 color="#FFFFFF"
                 size={20}
               />
               <Text style={[styles.tabText, styles.fontColor]}>
-                {cmsData.raise_form_title}
+                Customer's List
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.faqSettingsView}>
-            <TouchableOpacity
-              onPress={() => this.openNavigation("WriteTags")}
-              style={styles.tabBar}
-            >
-              <Icon
-                name="tags"
-                backgroundColor="#3b5998"
-                color="#FFFFFF"
-                size={20}
-              />
-              <Text style={[styles.tabText, styles.fontColor]}>Write Tags</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.openNavigation("WriteKeys")}
-              style={styles.tabBar}
-            >
-              <Icon
-                name="key"
-                backgroundColor="#3b5998"
-                color="#FFFFFF"
-                size={20}
-              />
-              <Text style={[styles.tabText, styles.fontColor]}>Write Keys</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.openNavigation("faq")}
-              style={styles.tabBar}
-            >
-              <Icon
-                name="question-circle"
-                backgroundColor="#3b5998"
-                color="#FFFFFF"
-                size={20}
-              />
-              <Text style={[styles.tabText, styles.fontColor]}>
-                {cmsData.faq_title}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.openNavigation("contact")}
-              style={styles.tabBar}
-            >
-              <Icon
-                name="user"
-                backgroundColor="#3b5998"
-                color="#FFFFFF"
-                size={20}
-              />
-              <Text style={[styles.tabText, styles.fontColor]}>
-                {cmsData.contact_us_title}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.handlePress()}
-              style={styles.tabBar}
-            >
-              <Icon
-                name="bell"
-                backgroundColor="#3b5998"
-                color="#FFFFFF"
-                size={20}
-              />
-              <Text style={[styles.tabText, styles.fontColor]}>
-                {"Panic Alarms"}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.openNavigation("editProfile")}
-              style={styles.tabBar}
-            >
-              <Icon
-                name="user"
-                backgroundColor="#3b5998"
-                color="#FFFFFF"
-                size={20}
-              />
-              <Text style={[styles.tabText, styles.fontColor]}>
-                {cmsData.profile_title}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.openNavigation("CustomerList")}
-              style={styles.tabBar}
-            >
-              <Icon
-                name="building"
-                backgroundColor="#3b5998"
-                color="#FFFFFF"
-                size={20}
-              />
-              <Text style={[styles.tabText, styles.fontColor]}>
-                Customer List
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => this.openNavigation("ScanJob")}
-              style={styles.tabBar}
-            >
-              <Icon
-                name="info-circle"
-                backgroundColor="#3b5998"
-                color="#FFFFFF"
-                size={20}
-              />
-              <Text style={[styles.tabText, styles.fontColor]}>
-                {cmsData.info_title}
-              </Text>
-            </TouchableOpacity>
-          </View>
+
           <View>
             <TouchableOpacity
               onPress={() => this.logout()}
@@ -258,6 +140,7 @@ export default class DrawerScreen extends Component<> {
         </ScrollView>
         <DropdownMessageAlert ref={c => (this._dropdown = c)} />
       </View>
+
     );
   }
 }

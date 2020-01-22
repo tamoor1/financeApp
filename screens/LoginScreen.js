@@ -17,48 +17,28 @@ import LoadingButton from '../templates/LoadingButton';
 import functions from '../utils/functions';
 import { StackNavigator } from 'react-navigation';
 
-export default class App extends Component<{}> {
+export default class Login extends Component {
 	navigation = this.props.navigation;
 
 	state = {
-		email: '',
-		password: '',
+		UserName: '',
+		Password: '',
 		loginData: {}
 	};
 
-	async componentDidMount() {
-		const loginData = await functions.getLoginData();
-		this.setState({ loginData });
-		console.log(this.state.loginData.isLogin);
-		if (this.state.loginData.isLogin) {
-			var prevDate = this.state.loginData.LastLoginData;
-			var CurrentDate = new Date();
-			lastDate = new Date(prevDate);
-			var start = Math.floor(lastDate.getTime() / (3600 * 24 * 1000));
-			var end = Math.floor(CurrentDate.getTime() / (3600 * 24 * 1000));
-			var daysDiff = end - start;
-			console.log('days diff: ', daysDiff);
-			if (daysDiff < 7) {
-				var date = new Date();
-				const logindata = { isLogin: 1, LastLoginData: date };
-				await functions.setLoginData(logindata);
-				this.navigation.navigate('Home');
-			}
-		}
-	}
 	validateForm() {
 		const { state } = this;
-		let email = state.email;
-		let password = state.password;
+		let UserName = state.UserName;
+		let Password = state.Password;
 		let isValid = false;
 
-		if (email == '') {
+		if (UserName == '') {
 			this._dropdown.itemAction({
 				title: 'Error',
 				message: 'Email is required',
 				type: 'error'
 			});
-		} else if (password == '') {
+		} else if (Password == '') {
 			this._dropdown.itemAction({
 				title: 'Error',
 				message: 'Password is required',
@@ -71,32 +51,28 @@ export default class App extends Component<{}> {
 	}
 
 	async login() {
-		this.navigation.navigate('Dashboard');
 		if (this.validateForm()) {
 			const { state } = this;
+			const data = {
+				UserName: state.UserName,
+				Password: state.Password,
 
-			const url = `/auth/login?email=${state.email}&password=${state.password}`;
+			};
 			this._loginBtn.showLoading(true);
-			const response = await services.login(url);
-			console.log('TCL: App -> login -> response', response);
+			const response = await services.login(data);
+			// console.log("TCL: Login -> login -> response", response)
 
-			const responseJson = await response.json();
-			console.log('TCL: App -> login -> responseJson', responseJson);
 			this._loginBtn.showLoading(false);
-
-			// const userId = await functions.getUserId();
-			if (responseJson) {
-				// await functions.setUserData(responseJson);
-				// var date = new Date();
-				// const logindata = { isLogin: 1, LastLoginData: date };
-				// await functions.setLoginData(logindata);
+			if (response.ok) {
+				const responseJson = await response.json();
+				console.log('Response in JSON 1: ', responseJson);
+				await AsyncStorage.multiSet([
+					['user_token', responseJson.Token],
+					['user', JSON.stringify(responseJson)]
+				]);
 				this.navigation.navigate('Dashboard');
 			} else {
-				this._dropdown.itemAction({
-					type: 'error',
-					title: 'Error',
-					message: responseJson.message
-				});
+				this._dropdown.itemAction({ type: 'error', title: 'Error', message: 'Something went wrong!' });
 			}
 		}
 	}
@@ -117,18 +93,20 @@ export default class App extends Component<{}> {
 							<Text style={styles.inputText}>Email</Text>
 							<TextInput
 								style={styles.inputBox}
-								value={this.state.email}
-								onChangeText={(t) => this.setState({ email: t })}
+								value={this.state.UserName}
+								onChangeText={(t) => this.setState({ UserName: t })}
 								placeholder="Email"
 								autoCorrect={false}
 								autoCapitalize="none"
 								placeholderTextColor="#a6b8d4"
+								keyboardType="email-address"
+								errorMessage="Please enter a valid email address"
 							/>
 							<Text style={styles.inputText}>Password</Text>
 							<TextInput
 								style={styles.inputBox}
-								value={this.state.password}
-								onChangeText={(t) => this.setState({ password: t })}
+								value={this.state.Password}
+								onChangeText={(t) => this.setState({ Password: t })}
 								placeholder="Password"
 								secureTextEntry={true}
 								autoCapitalize="none"
@@ -150,7 +128,7 @@ export default class App extends Component<{}> {
 							</Text>
 						</View>
 					</View>
-					{/* <DropdownMessageAlert ref={(c) => (this._dropdown = c)} /> */}
+					<DropdownMessageAlert ref={(c) => (this._dropdown = c)} />
 				</ScrollView>
 			</View>
 		);

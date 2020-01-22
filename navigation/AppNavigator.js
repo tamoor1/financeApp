@@ -12,13 +12,14 @@ import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
 import MainScreen from "../screens/MainScreen";
 import SignupScreen from "../screens/SignupScreen";
-import GalleryScreen from "../screens/GalleryScreen";
+import AddCustomerScreen from "../screens/AddCustomerScreen";
+import ListCustomersScreen from "../screens/ListCustomersScreen";
 
 
 
 const AuthStack = createStackNavigator(
   {
-    Home:{
+    Home: {
       screen: HomeScreen
     },
 
@@ -39,8 +40,12 @@ const HomeDrawer = createDrawerNavigator(
       screen: MainScreen
     },
 
-    Gallery: {
-      screen: GalleryScreen
+    addCustomer: {
+      screen: AddCustomerScreen
+    },
+
+    listCustomer: {
+      screen: ListCustomersScreen
     },
   },
   {

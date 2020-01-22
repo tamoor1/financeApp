@@ -8,14 +8,14 @@ import {
 } from 'react-native';
 export default class Logo extends Component<{}> {
   render() {
-    return(
+    return (
       <View style={styles.logo}>
-        <Image source={require('../images/newLogo.png')}
-        resizeMode={'contain'}
-        style={{
-          width: 200,
-          height: 100,
-        }} />
+        <Image source={require('../images/logo1.png')}
+          resizeMode={'contain'}
+          style={{
+            width: 200,
+            height: 100,
+          }} />
       </View>
     );
   }

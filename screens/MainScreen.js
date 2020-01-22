@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Slideshow from 'react-native-image-slider-show';
-import ImageSlider from 'react-native-image-slider';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
 	Platform,
@@ -19,8 +17,8 @@ import { NavigationEvents } from 'react-navigation';
 import DropdownMessageAlert from '../templates/DropdownMessageAlert';
 import services from '../utils/services';
 import functions from '../utils/functions';
-import OfflineNotice from '../components/OfflineNotice'; //<OfflineNotice />
-export default class App extends Component<{}> {
+
+export default class Main extends Component {
 	state = {
 		isConnected: true
 	};
@@ -37,7 +35,7 @@ export default class App extends Component<{}> {
 
 	render() {
 		return (
-			<View style={{ flex: 1, backgroundColor: '#b01800' }}>
+			<View style={{ flex: 1, backgroundColor: '' }}>
 				<Header
 					navigation={this.props.navigation}
 					showDrawer={true}
@@ -48,102 +46,30 @@ export default class App extends Component<{}> {
 
 				<ScrollView>
 					<View style={styles.dashboardView}>
-						<Text style={styles.dashboardText}>hello my new app</Text>
+						<Text style={styles.dashboardText}>My New Finance App</Text>
 					</View>
 					<View style={styles.tilesView}>
 						<View style={styles.flexView}>
 							<TouchableOpacity
-								onPress={() => this.props.navigation.navigate('Gallery')}
+								onPress={() => this.props.navigation.navigate('addCustomer')}
 								style={styles.tile}
 							>
 								<View>
-									<Text style={styles.tileText}>Tech</Text>
-								</View>
-								<View>
-									<Icon name="align-left" backgroundColor="#3b5998" color="red" size={40} />
-								</View>
-							</TouchableOpacity>
-							<TouchableOpacity
-								onPress={() => this.props.navigation.navigate('Gallery')}
-								style={styles.tile}
-							>
-								<View>
-									<Text style={styles.tileText}>Mountains</Text>
-								</View>
-								<View>
-									<Icon name="check-square-o" backgroundColor="#3b5998" color="red" size={40} />
-								</View>
-							</TouchableOpacity>
-						</View>
-						<View style={styles.flexView}>
-							<TouchableOpacity
-								onPress={() => this.props.navigation.navigate('Gallery')}
-								style={styles.tile}
-							>
-								<View>
-									<Text style={styles.tileText}>Roads</Text>
+									<Text style={styles.tileText}>Add Customers</Text>
 								</View>
 								<View>
 									<Icon name="pencil" backgroundColor="#3b5998" color="red" size={40} />
 								</View>
 							</TouchableOpacity>
 							<TouchableOpacity
-								onPress={() => this.props.navigation.navigate('Gallery')}
+								onPress={() => this.props.navigation.navigate('listCustomer')}
 								style={styles.tile}
 							>
 								<View>
-									<Text style={styles.tileText}>Cities</Text>
+									<Text style={styles.tileText}>Customer's List</Text>
 								</View>
 								<View>
-									<Icon name="tags" backgroundColor="#3b5998" color="red" size={40} />
-								</View>
-							</TouchableOpacity>
-						</View>
-						<View style={styles.flexView}>
-							<TouchableOpacity
-								onPress={() => this.props.navigation.navigate('Gallery')}
-								style={styles.tile}
-							>
-								<View>
-									<Text style={styles.tileText}>Lakes</Text>
-								</View>
-								<View>
-									<Icon name="align-left" backgroundColor="#3b5998" color="red" size={40} />
-								</View>
-							</TouchableOpacity>
-							<TouchableOpacity
-								onPress={() => this.props.navigation.navigate('Gallery')}
-								style={styles.tile}
-							>
-								<View>
-									<Text style={styles.tileText}>Mountains</Text>
-								</View>
-								<View>
-									<Icon name="check-square-o" backgroundColor="#3b5998" color="red" size={40} />
-								</View>
-							</TouchableOpacity>
-						</View>
-						<View style={styles.flexView}>
-							<TouchableOpacity
-								onPress={() => this.props.navigation.navigate('Gallery')}
-								style={styles.tile}
-							>
-								<View>
-									<Text style={styles.tileText}>Roads</Text>
-								</View>
-								<View>
-									<Icon name="pencil" backgroundColor="#3b5998" color="red" size={40} />
-								</View>
-							</TouchableOpacity>
-							<TouchableOpacity
-								onPress={() => this.props.navigation.navigate('Gallery')}
-								style={styles.tile}
-							>
-								<View>
-									<Text style={styles.tileText}>Cities</Text>
-								</View>
-								<View>
-									<Icon name="tags" backgroundColor="#3b5998" color="red" size={40} />
+									<Icon name="list" backgroundColor="#3b5998" color="red" size={40} />
 								</View>
 							</TouchableOpacity>
 						</View>
@@ -156,12 +82,18 @@ export default class App extends Component<{}> {
 }
 
 const styles = {
+	screen: {
+		flex: 1,
+		backgroundColor: '#edf1f5',
+	},
 	container: {
 		flex: 1,
-		backgroundColor: 'red'
+		backgroundColor: '#edf1f5'
 	},
 	dashboardView: {
-		height: 75
+		height: 75,
+		backgroundColor: '#b01800',
+		marginBottom: 13
 	},
 	dashboardText: {
 		fontSize: 16,

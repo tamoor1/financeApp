@@ -13,116 +13,184 @@ import Logo from './Logo';
 import services from '../utils/services';
 import DropdownMessageAlert from '../templates/DropdownMessageAlert';
 import LoadingButton from '../templates/LoadingButton';
+import deviceStorage from '../utils/deviceStorage'
 
-export default class App extends Component<{}> {
+export default class App extends Component {
   state = {
-    user_name: '',
-    password: '',
-    confirmPassword: '',
-    phone_number: '',
-    address: '',
+    CompanyName: '',
+    Username: '',
+    Password: '',
+    Address: '',
+    Phone: '',
+    Fax: '',
+    NTN: '',
+    STN: '',
+    FirstName: '',
+    LastName: ''
+
   }
 
   validateForm() {
-    const {state} = this;
-    let user_name = state.user_name.trim();
-    let password = state.password;
-    let confirmPassword = state.confirmPassword;
-    let phone_number = state.phone_number;
-    let address = state.address;
+    const { state } = this;
+    let CompanyName = state.Username;
+    let Username = state.Username.trim();
+    let Password = state.Password;
+    let Address = state.Address;
+    let Phone = state.Phone;
+    let Fax = state.Fax;
+    let NTN = state.NTN;
+    let STN = state.STN;
+    let FirstName = state.FirstName;
+    let LastName = state.LastName;
+
+
     let isValid = false;
 
-    if(user_name == '') {
-        this._dropdown.itemAction({title: 'Error', message: 'User Name is required', type: 'error'});
-      } else if(phone_number == '') {
-        this._dropdown.itemAction({title: 'Error', message: 'Mobile Number is required', type: 'error'});
-      } else if(address == '') {
-        this._dropdown.itemAction({title: 'Error', message: 'Address is required', type: 'error'});
-      } else if(password == '') {
-        this._dropdown.itemAction({title: 'Error', message: 'Password is required', type: 'error'});
-      } else if(password !== confirmPassword) {
-        this._dropdown.itemAction({title: 'Error',message: 'Password and Confirm Password are not same', type: 'error'});
-      } else {
-        isValid = true;
-      }
-      return isValid;
+    if (CompanyName == '') {
+      this._dropdown.itemAction({ title: 'Error', message: 'Company Name is required', type: 'error' });
+    } else if (Username == '') {
+      this._dropdown.itemAction({ title: 'Error', message: 'User Name is required', type: 'error' });
+    } else if (Address == '') {
+      this._dropdown.itemAction({ title: 'Error', message: 'Address is required', type: 'error' });
+    } else if (Phone == '') {
+      this._dropdown.itemAction({ title: 'Error', message: 'Phone is required', type: 'error' });
+    } else if (FirstName == '') {
+      this._dropdown.itemAction({ title: 'Error', message: 'First Name is required', type: 'error' });
+    } else {
+      isValid = true;
     }
+    return isValid;
+  }
 
   async registerUser() {
     if (this.validateForm()) {
-      const {state} = this;
+      const { state } = this;
       const data = {
-        user_name: state.user_name,
-        password: state.password,
-        phone_number: state.phone_number,
-        address: state.address,
+        CompanyName: state.CompanyName,
+        Username: state.Username,
+        Password: state.Password,
+        Address: state.Address,
+        Phone: state.Phone,
+        Fax: state.Fax,
+        NTN: state.NTN,
+        STN: state.STN,
+        FirstName: state.FirstName,
+        LastName: state.LastName,
       };
       this._signupBtn.showLoading(true);
       const response = await services.signup(data);
       const responseJson = await response.json();
+      console.log("TCL: App -> registerUser -> responseJson", responseJson)
       this._signupBtn.showLoading(false);
       console.log(responseJson);
-      if (responseJson.response === 'success') {
-        this._dropdown.itemAction({type: 'success', title: 'Account Created', message: 'Your account has been created successfully.'});
+      if (response.ok) {
+        this._dropdown.itemAction({ type: 'success', title: 'Account Created', message: 'Your account has been created successfully.' });
+        this.navigation.navigate('Login');
       } else {
-        this._dropdown.itemAction({type: 'error', title: 'Error', message: 'There was some error in creating your account, please try again.'});
+        this._dropdown.itemAction({ type: 'error', title: 'Error', message: 'There was some error in creating your account, please try again.' });
       }
     }
   }
 
   render() {
-    return(
-        <View style={styles.container}>
-          <ScrollView contentContainerStyle={{padding: 20}} keyboardDismissMode={'on-drag'} >
+    return (
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={{ padding: 20 }} keyboardDismissMode={'on-drag'} >
           <View style={styles.logoView}>
             <Image source={require('../images/logo1.png')}
               resizeMode={'contain'}
-              style={{width: '100%', height: 130}}
+              style={{ width: '100%', height: 130 }}
             />
           </View>
           <View style={styles.form}>
-            <Text style={styles.inputText}>User Name<Text style={{color: 'red'}}>*</Text></Text>
+            <Text style={styles.inputText}>Company Name<Text style={{ color: 'red' }}>*</Text></Text>
             <TextInput style={styles.inputBox}
-              onChangeText={(t) => this.setState({user_name: t})}
-              placeholder="User Name"
-              placeholderTextColor = "#a6b8d4"
+              onChangeText={(t) => this.setState({ CompanyName: t })}
+              placeholder="Company Name"
+              placeholderTextColor="#a6b8d4"
+              autoCapitalize='none'
             />
-            <Text style={styles.inputText}>Mobile<Text style={{color: 'red'}}>*</Text></Text>
+            <Text style={styles.inputText}>Email<Text style={{ color: 'red' }}>*</Text></Text>
             <TextInput style={styles.inputBox}
-              onChangeText={(t) => this.setState({phone_number: t})}
-              placeholder="Mobile Number"
-              placeholderTextColor = "#a6b8d4"
+              onChangeText={(t) => this.setState({ Username: t })}
+              placeholder="Email"
+              placeholderTextColor="#a6b8d4"
+              autoCapitalize='none'
+              keyboardType="email-address"
+              required
+              email
+              errorMessage="Please enter a valid email address"
             />
-            <Text style={styles.inputText}>Address<Text style={{color: 'red'}}>*</Text></Text>
+            <Text style={styles.inputText}>Password<Text style={{ color: 'red' }}>*</Text></Text>
             <TextInput style={styles.inputBox}
-              onChangeText={(t) => this.setState({address: t})}
-              placeholder="Address"
-              placeholderTextColor = "#a6b8d4"
-            />
-            <Text style={styles.inputText}>Password<Text style={{color: 'red'}}>*</Text></Text>
-            <TextInput style={styles.inputBox}
-              onChangeText={(t) => this.setState({password: t})}
+              onChangeText={(t) => this.setState({ Password: t })}
               placeholder="Password"
               autoCapitalize='none'
-              placeholderTextColor = "#a6b8d4"
+              placeholderTextColor="#a6b8d4"
               secureTextEntry={true}
+            // minLength={5}
+            // errorMessage="Please enter valid password (min length = 5)"
             />
-            <Text style={styles.inputText}>Confirm Password<Text style={{color: 'red'}}>*</Text></Text>
+            <Text style={styles.inputText}>Address<Text style={{ color: 'red' }}>*</Text></Text>
             <TextInput style={styles.inputBox}
-              onChangeText={(t) => this.setState({confirmPassword: t})}
-              placeholder = "Confirm Password"
+              onChangeText={(t) => this.setState({ Address: t })}
+              placeholder="Address"
+              placeholderTextColor="#a6b8d4"
+            />
+            <Text style={styles.inputText}>Phone<Text style={{ color: 'red' }}>*</Text></Text>
+            <TextInput style={styles.inputBox}
+              onChangeText={(t) => this.setState({ Phone: t })}
+              placeholder="Phone"
               autoCapitalize='none'
-              secureTextEntry={true}
-              placeholderTextColor = "#a6b8d4"
+              keyboardType="numeric"
+              placeholderTextColor="#a6b8d4"
+            />
+            <Text style={styles.inputText}>Fax</Text>
+            <TextInput style={styles.inputBox}
+              onChangeText={(t) => this.setState({ Fax: t })}
+              placeholder="Fax"
+              autoCapitalize='none'
+              keyboardType="numeric"
+              placeholderTextColor="#a6b8d4"
+            />
+            <Text style={styles.inputText}>NTN</Text>
+            <TextInput style={styles.inputBox}
+              onChangeText={(t) => this.setState({ NTN: t })}
+              placeholder="NTN"
+              autoCapitalize='none'
+              keyboardType="numeric"
+              placeholderTextColor="#a6b8d4"
+            />
+            <Text style={styles.inputText}>STN</Text>
+            <TextInput style={styles.inputBox}
+              onChangeText={(t) => this.setState({ STN: t })}
+              placeholder="STN"
+              autoCapitalize='none'
+              keyboardType="numeric"
+              placeholderTextColor="#a6b8d4"
+            />
+            <Text style={styles.inputText}>First Name<Text style={{ color: 'red' }}>*</Text></Text>
+            <TextInput style={styles.inputBox}
+              onChangeText={(t) => this.setState({ FirstName: t })}
+              placeholder="First Name"
+              autoCapitalize='none'
+              placeholderTextColor="#a6b8d4"
+            />
+            <Text style={styles.inputText}>Last Name<Text style={{ color: 'red' }}>*</Text></Text>
+            <TextInput style={styles.inputBox}
+              onChangeText={(t) => this.setState({ LastName: t })}
+              placeholder="Last Name"
+              autoCapitalize='none'
+              placeholderTextColor="#a6b8d4"
             />
             <LoadingButton ref={(c) => this._signupBtn = c} title='Signup' style={styles.button} onPress={() => this.registerUser()} />
             <View style={styles.forgotPassword}>
-              <Text style={styles.forgotPasswordText}>Already have an account? <Text style={{color: '#28609e'}} onPress={() => this.props.navigation.navigate('Login')}> Log In</Text></Text>
+              <Text style={styles.forgotPasswordText}>Already have an account? <Text style={{ color: '#28609e' }} onPress={() => this.props.navigation.navigate('Login')}> Log In</Text></Text>
             </View>
           </View>
-          </ScrollView>
-          <DropdownMessageAlert ref={(c) => this._dropdown = c} />
-        </View>
+        </ScrollView>
+        <DropdownMessageAlert ref={(c) => this._dropdown = c} />
+      </View>
     );
   }
 }
@@ -140,7 +208,7 @@ const styles = {
     flex: 1,
     justifyContent: 'flex-end'
   },
-  inputText:{
+  inputText: {
     fontSize: 18,
     color: 'black'
   },

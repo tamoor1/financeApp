@@ -1,1 +1,1 @@
-# GalleryApp
+# Finance App
